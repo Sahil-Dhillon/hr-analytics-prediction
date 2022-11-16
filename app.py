@@ -1,8 +1,10 @@
+import os
+import pickle
+
+import numpy as np
 from flask import Flask, render_template, request
 from flask_cors import CORS
-import pickle
-import numpy as np
-import os
+
 app = Flask(__name__)
 CORS(app)
 model = pickle.load(open('hr_rf_model.pkl', 'rb'))
@@ -29,16 +31,17 @@ def predict():
     # print(int_features)
     int_features[0] = int_features[0]/100
     if(int_features[-1] == 1):
-        int_features.append(0)
+        int_features[-1] == 0
+        int_features.append(1)
         int_features.append(0)
     elif(int_features[-1] == 2):
         int_features[-1] = 0
-        int_features.append(1)
         int_features.append(0)
+        int_features.append(1)
     elif(int_features[-1] == 3):
-        int_features[-1] = 0
+        int_features[-1] = 1
         int_features.append(0)
-        int_features.append(1)
+        int_features.append(0)
     print(int_features)
     final = [np.array(int_features)]
     prediction = model.predict(final)
